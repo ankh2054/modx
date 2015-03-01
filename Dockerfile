@@ -1,5 +1,5 @@
 FROM debian:jessie
-MAINTAINER - test  Charles Holtzkampf <charles.holtzkampf@gmail.com>
+MAINTAINER - Charles Holtzkampf <charles.holtzkampf@gmail.com>
 
 # Install Nginx - 
 RUN \
