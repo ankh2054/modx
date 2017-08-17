@@ -57,8 +57,11 @@ VOLUME /var/www/modx
 VOLUME /var/lib/mysql
 VOLUME /var/log/nginx
 
+# Volumes explained
 # At some point move to using flocker for volumes - http://clusterhq.com/2015/12/09/difference-docker-volumes-flocker-volumes/
 # This way yuo can store your data outside of your docker host and onto a Amazon EBS host, so your data stays intact even if docker host dies.
+# https://www.nschoe.com/articles/2017-01-28-Docker-Taming-the-Beast-Part-4.html
+
 
 # Set the default command to execute
 # when creating a new container
