@@ -61,6 +61,7 @@ VOLUME /var/log/nginx
 # At some point move to using flocker for volumes - http://clusterhq.com/2015/12/09/difference-docker-volumes-flocker-volumes/
 # This way yuo can store your data outside of your docker host and onto a Amazon EBS host OR Google Persistent Disk, so your data stays intact even if docker host dies.
 # https://www.nschoe.com/articles/2017-01-28-Docker-Taming-the-Beast-Part-4.html
+# Need a way to use google persistent disks for our data.
 
 
 # Set the default command to execute
