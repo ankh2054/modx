@@ -2,13 +2,15 @@ FROM debian:jessie
 MAINTAINER - Charles Holtzkampf <charles.holtzkampf@gmail.com>
 
 #MODX Variables
-ENV MODXuser
-ENV MODXpass
+ENV MODXuser username
+ENV MODXpass password
 
+#MYSQL Variables
+ENV  ROOT_PWD ackmodx
 
 # Install Nginx - 
 RUN apt-get update
-RUN apt-get install -y nginx nano wget dialog net-tools mysql-server php5-fpm php5-mysql 
+RUN apt-get install -y nginx wget mysql-server php5-fpm php5-mysql 
 
 # Remove the default Nginx configuration file
 RUN rm -v /etc/nginx/nginx.conf
@@ -21,12 +23,28 @@ ADD ./nginx.conf /etc/nginx/
 RUN echo "\ndaemon off;" >> /etc/nginx/nginx.conf  # To ensure the container does not stop
 RUN chown -R www-data:www-data /var/lib/nginx # Nginx needs access to create temporary files
 
+#
+# mySQL Server
+#
+RUN  apk add --update mysql mysql-client
+COPY mysql.sh /tmp/mysql.sh
+RUN  sh /tmp/mysql.sh && rm /tmp/mysql.sh
+
+#
+# Container configuration
+#
+EXPOSE 80
+VOLUME /home/modx
+
 
 # Define mountable directories for Nginx
 #VOLUME ["/etc/nginx/sites-enabled", "/etc/nginx/certs", "/etc/nginx/conf.d", "/var/www/html"]
 
-# Expose ports
-EXPOSE 80
+#
+# MODX
+#
+COPY modx.sh /tmp/modx.sh
+RUN  sh /tmp/modx.sh && rm /tmp/modx.s
 
 # Set the default command to execute
 # when creating a new container
