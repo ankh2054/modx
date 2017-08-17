@@ -54,7 +54,7 @@ COPY mysql.conf nginx.conf php-fpm.conf /etc/supervisor/conf.d
 ###############################
 
 EXPOSE 80
-VOLUME /home/modx
+VOLUME /var/www/modx
 
 # Set the default command to execute
 # when creating a new container
