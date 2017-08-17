@@ -2,9 +2,9 @@
 #
 # Get latest MODX Revolution
 #
-wget -q http://modx.com/download/latest -O /home/latest.zip
-unzip /home/latest.zip -x "*/./" -d /home > /dev/null 2>&1
+wget -q http://modx.com/download/latest -O /tmp/latest.zip
+unzip /tmp/latest.zip -x "*/./" -d /tmp > /dev/null 2>&1
 rm /home/latest.zip
-MODX=`ls /home | grep -v latest.zip`
-mv /home/$MODX /home/modx
-chown -R nobody.nobody /home/modx
+MODX=`ls /tmp | grep -v latest.zip`
+mv /home/$MODX /var/www/modx
+chown -R www-data:www-data /var/www/modx
