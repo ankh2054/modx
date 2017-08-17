@@ -28,7 +28,6 @@ COPY ./nginx-site.conf /etc/nginx/sites-available/default
 COPY ./nginx-server.conf /etc/nginx/nginx.conf
 
 # nginx config
-RUN echo "\ndaemon off;" >> /etc/nginx/nginx.conf  # To ensure the container does not stop
 RUN chown -R www-data:www-data /var/lib/nginx # Nginx needs access to create temporary files
 
 # PHP FPM config changes
@@ -56,6 +55,10 @@ COPY mysql.conf nginx.conf php-fpm.conf /etc/supervisor/conf.d
 EXPOSE 80
 VOLUME /var/www/modx
 VOLUME /var/lib/mysql
+VOLUME /var/log/nginx
+
+# At some point move to using flocker for volumes - http://clusterhq.com/2015/12/09/difference-docker-volumes-flocker-volumes/
+# This way yuo can store your data outside of your docker host and onto a Amazon EBS host, so your data stays intact even if docker host dies.
 
 # Set the default command to execute
 # when creating a new container
