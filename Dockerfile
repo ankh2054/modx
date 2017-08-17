@@ -1,4 +1,4 @@
-FROM debian:jessie
+FROM ubuntu:16.04
 MAINTAINER - Charles Holtzkampf <charles.holtzkampf@gmail.com>
 
 #MODX Variables
@@ -10,7 +10,7 @@ ENV  ROOT_PWD ackmodx
 
 # Install Nginx - 
 RUN apt-get update
-RUN apt-get install -y nginx wget mysql-server php5-fpm php5-mysql 
+RUN apt-get install -y nginx wget mysql-server php-fpm php-mysql 
 
 # Remove the default Nginx configuration file
 RUN rm -v /etc/nginx/nginx.conf
@@ -22,6 +22,10 @@ ADD ./nginx.conf /etc/nginx/
 # nginx config
 RUN echo "\ndaemon off;" >> /etc/nginx/nginx.conf  # To ensure the container does not stop
 RUN chown -R www-data:www-data /var/lib/nginx # Nginx needs access to create temporary files
+
+# PHP FPM config changes
+RUN sed -i -e "s/;daemonize\s*=\s*yes/daemonize = no/g" /etc/php/7.0/fpm/php-fpm.conf # To ensure the container does not stop
+RUN sed -i "s/;cgi.fix_pathinfo=1/cgi.fix_pathinfo=0/" /etc/php/7.0/fpm/php.ini # Prevents PHP from executing losest file
 
 #
 # mySQL Server
