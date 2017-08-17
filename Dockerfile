@@ -1,16 +1,24 @@
 FROM ubuntu:16.04
 MAINTAINER - Charles Holtzkampf <charles.holtzkampf@gmail.com>
 
-#MODX Variables
-ENV MODXuser username
-ENV MODXpass password
 
-#MYSQL Variables
-ENV  ROOT_PWD ackmodx
 
-# Install Nginx - 
-RUN apt-get update
-RUN apt-get install -y nginx wget mysql-server php-fpm php-mysql 
+
+## Install php nginx mysql supervisor ###
+########################################
+RUN apt-get update && \
+    apt-get install -y php-fpm php-cli php-gd php-mcrypt php-mysql php-curl \
+                       nginx \
+                       curl \
+		       supervisor && \
+    echo "mysql-server mysql-server/root_password password" | debconf-set-selections && \
+    echo "mysql-server mysql-server/root_password_again password" | debconf-set-selections && \
+    apt-get install -y mysql-server && \
+
+
+### Nginx ###
+#############
+
 
 # Remove the default Nginx configuration file
 RUN rm -v /etc/nginx/nginx.conf
@@ -27,29 +35,28 @@ RUN chown -R www-data:www-data /var/lib/nginx # Nginx needs access to create tem
 RUN sed -i -e "s/;daemonize\s*=\s*yes/daemonize = no/g" /etc/php/7.0/fpm/php-fpm.conf # To ensure the container does not stop
 RUN sed -i "s/;cgi.fix_pathinfo=1/cgi.fix_pathinfo=0/" /etc/php/7.0/fpm/php.ini # Prevents PHP from executing losest file
 
-#
-# mySQL Server
-#
-RUN  apk add --update mysql mysql-client
-COPY mysql.sh /tmp/mysql.sh
-RUN  sh /tmp/mysql.sh && rm /tmp/mysql.sh
-
-#
-# Container configuration
-#
-EXPOSE 80
-VOLUME /home/modx
 
 
-# Define mountable directories for Nginx
-#VOLUME ["/etc/nginx/sites-enabled", "/etc/nginx/certs", "/etc/nginx/conf.d", "/var/www/html"]
+### MODX ###
+############
 
-#
-# MODX
-#
 COPY modx.sh /tmp/modx.sh
 RUN  sh /tmp/modx.sh && rm /tmp/modx.s
 
+### Supervisor ###
+##################
+
+COPY mysql.conf nginxs.conf php-fpm.conf /etc/supervisor/conf.d
+
+
+
+### Container configuration ###
+###############################
+
+EXPOSE 80
+VOLUME /home/modx
+
 # Set the default command to execute
 # when creating a new container
-CMD service nginx start
+
+CMD start.sh
