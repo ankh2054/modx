@@ -24,8 +24,8 @@ RUN apt-get update && \
 RUN rm -v /etc/nginx/nginx.conf
 
 # Copy configuration files from the current directory
-ADD ./nginx-site.conf /etc/nginx/sites-available/default
-ADD ./nginx.conf /etc/nginx/
+COPY ./nginx-site.conf /etc/nginx/sites-available/default
+COPY ./nginx-server.conf /etc/nginx/nginx.conf
 
 # nginx config
 RUN echo "\ndaemon off;" >> /etc/nginx/nginx.conf  # To ensure the container does not stop
@@ -46,7 +46,7 @@ RUN  sh /tmp/modx.sh && rm /tmp/modx.s
 ### Supervisor ###
 ##################
 
-COPY mysql.conf nginxs.conf php-fpm.conf /etc/supervisor/conf.d
+COPY mysql.conf nginx.conf php-fpm.conf /etc/supervisor/conf.d
 
 
 
