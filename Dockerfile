@@ -17,7 +17,7 @@ RUN apt-get update && apt-get install -y \
     nginx \
     wget \
     unzip \
-    supervisor
+   
 
 
 ### Nginx  & PHP-FPM ###
@@ -48,14 +48,6 @@ RUN chown -R www-data:www-data /DATA
 ADD  ./modx.sh /tmp/modx.sh
 RUN  sh /tmp/modx.sh && rm /tmp/modx.sh
 
-### Supervisor ###
-##################
-
-ADD supervisor/mysql.conf  /etc/supervisor/conf.d
-ADD supervisor/nginx.conf  /etc/supervisor/conf.d
-ADD supervisor/php-fpm.conf /etc/supervisor/conf.d
-
-
 
 ### Container configuration ###
 ###############################
@@ -73,5 +65,6 @@ VOLUME ["/DATA"]
 
 # Set the default command to execute
 # when creating a new container
-
-CMD start.sh
+ADD ./start.sh
+RUN chmod u+x start.sh
+CMD ["/start.sh"]
