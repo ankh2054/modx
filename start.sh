@@ -19,5 +19,5 @@ mkdir -p /tmp/nginx
 chown www-data:www-data /tmp/www-data
 chown -R www-data:www-data /DATA
 
-php-fpm7
-nginx
+/usr/sbin/php-fpm7.0 
+/usr/sbin/nginx 
