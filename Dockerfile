@@ -7,14 +7,17 @@ RUN export DEBIAN_FRONTEND="noninteractive"
 
 ## Install php nginx mysql supervisor ###
 ########################################
-RUN apt-get update && \
-    apt-get install -y php-fpm php-cli php-gd php-mcrypt php-mysql php-curl \
-                       nginx \
-                       curl \
-		       supervisor && \
-    echo "mysql-server mysql-server/root_password password" | debconf-set-selections && \
-    echo "mysql-server mysql-server/root_password_again password" | debconf-set-selections && \
-    apt-get install -y mysql-server && \
+RUN apt-get update && apt-get install -y \
+    php-fpm \
+    php-cli \
+    php-gd  \
+    php-mcrypt \
+    php-mysql \
+    php-curl \
+    nginx \
+    wget \
+    unzip \
+    supervisor
 
 
 ### Nginx  & PHP-FPM ###
@@ -28,15 +31,13 @@ RUN rm -v /etc/nginx/nginx.conf
 ADD files/nginx.conf /etc/nginx/nginx.conf
 ADD files/php-fpm.conf /etc/php7/fpm/
 
-# nginx config
-RUN chown -R www-data:www-data /var/lib/nginx # Nginx needs access to create temporary files
 
 # PHP FPM config changes
-RUN sed -i "s/;cgi.fix_pathinfo=1/cgi.fix_pathinfo=0/" /etc/php/7.0/fpm/php.ini # Prevents PHP from executing losest file
 
 # Create LOG directoties for NGINX & PHP-FPM
 RUN mkdir -p /DATA/logs/php-fpm
 RUN mkdir -p /DATA/logs/nginx
+RUN mkdir -p /DATA/www
 RUN chown -R www-data:www-data /DATA
 
 
@@ -44,15 +45,15 @@ RUN chown -R www-data:www-data /DATA
 ### MODX ###
 ############
 
-COPY modx.sh /tmp/modx.sh
-RUN  sh /tmp/modx.sh && rm /tmp/modx.s
+ADD  ./modx.sh /tmp/modx.sh
+RUN  sh /tmp/modx.sh && rm /tmp/modx.sh
 
 ### Supervisor ###
 ##################
 
-ADD mysql.conf  /etc/supervisor/conf.d
-ADD nginx.conf  /etc/supervisor/conf.d
-ADD php-fpm.conf /etc/supervisor/conf.d
+ADD supervisor/mysql.conf  /etc/supervisor/conf.d
+ADD supervisor/nginx.conf  /etc/supervisor/conf.d
+ADD supervisor/php-fpm.conf /etc/supervisor/conf.d
 
 
 
