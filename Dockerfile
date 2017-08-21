@@ -17,6 +17,7 @@ RUN apt-get update && apt-get install -y \
     nginx \
     wget \
     unzip \
+    supervisor
    
 
 
@@ -62,9 +63,11 @@ VOLUME ["/DATA"]
 # https://www.nschoe.com/articles/2017-01-28-Docker-Taming-the-Beast-Part-4.html
 # Step1 - Add persistent disk to your ubuntu host - host docker persistent files on there. 
 
+### Supervisor.conf ###
+######################
+ADD files/supervisor.conf /etc/supervisor/conf.d/supervisord.conf
+
 
 # Set the default command to execute
 # when creating a new container
-ADD ./start.sh
-RUN chmod u+x start.sh
-CMD ["/start.sh"]
+CMD /usr/bin/supervisord -c /etc/supervisor/conf.d/supervisord.conf 
