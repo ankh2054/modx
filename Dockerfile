@@ -1,9 +1,6 @@
 FROM ubuntu:16.04
 MAINTAINER - Charles Holtzkampf <charles.holtzkampf@gmail.com>
-RUN export DEBIAN_FRONTEND="noninteractive"
-
-
-
+RUN export DEBIAN_FRONTEND="noninteractive
 
 ## Install php nginx mysql supervisor ###
 ########################################
@@ -33,28 +30,13 @@ ADD files/nginx.conf /etc/nginx/nginx.conf
 ADD files/php-fpm.conf /etc/php/7.0/fpm/
 
 
-# PHP FPM config changes
-
-# Create LOG directoties for NGINX & PHP-FPM
-RUN mkdir -p /DATA/logs/php-fpm
-RUN mkdir -p /DATA/logs/nginx
-RUN mkdir -p /DATA/www
-RUN chown -R www-data:www-data /DATA
-
-
-
 ### MODX ###
 ############
 
-ADD  ./modx.sh /tmp/modx.sh
-RUN  sh /tmp/modx.sh 
-
-
-### Container configuration ###
-###############################
-
-EXPOSE 80
-VOLUME ["/DATA"]
+ADD files/modx-config.xml /tmp/
+# You can now use SED and docker ENV variables to update the XML file
+RUN cd /tmp/; wget -q https://raw.github.com/craftsmancoding/modx_utils/master/installmodx.php 
+#RUN  cd /DATA/www; php installmodx.php --config=modx-config.xml
 
 
 # Volumes explained
@@ -68,6 +50,15 @@ VOLUME ["/DATA"]
 ADD files/supervisord.conf /etc/supervisor/supervisord.conf
 
 
+### Container configuration ###
+###############################
+
+EXPOSE 80
+VOLUME /DATA
+
 # Set the default command to execute
 # when creating a new container
-CMD ["/usr/bin/supervisord", "-n", "-c", "/etc/supervisor/supervisord.conf"]
+ADD start.sh /
+RUN chmod u+x /start.sh
+CMD /start.sh
+#CMD ["/usr/bin/supervisord", "-n", "-c", "/etc/supervisor/supervisord.conf"]
