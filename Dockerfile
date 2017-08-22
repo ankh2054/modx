@@ -30,7 +30,7 @@ RUN rm -v /etc/nginx/nginx.conf
 
 # Copy configuration files from the current directory
 ADD files/nginx.conf /etc/nginx/nginx.conf
-ADD files/php-fpm.conf /etc/php7/fpm/
+ADD files/php-fpm.conf /etc/php/7.0/fpm/
 
 
 # PHP FPM config changes
@@ -47,7 +47,7 @@ RUN chown -R www-data:www-data /DATA
 ############
 
 ADD  ./modx.sh /tmp/modx.sh
-RUN  sh /tmp/modx.sh && rm /tmp/modx.sh
+RUN  sh /tmp/modx.sh 
 
 
 ### Container configuration ###
@@ -65,9 +65,9 @@ VOLUME ["/DATA"]
 
 ### Supervisor.conf ###
 ######################
-ADD files/supervisor.conf /etc/supervisor/conf.d/supervisord.conf
+ADD files/supervisord.conf /etc/supervisor/supervisord.conf
 
 
 # Set the default command to execute
 # when creating a new container
-CMD /usr/bin/supervisord -c /etc/supervisor/conf.d/supervisord.conf 
+CMD ["/usr/bin/supervisord", "-n", "-c", "/etc/supervisor/supervisord.conf"]
