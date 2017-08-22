@@ -2,9 +2,12 @@ FROM ubuntu:16.04
 MAINTAINER - Charles Holtzkampf <charles.holtzkampf@gmail.com>
 RUN export DEBIAN_FRONTEND="noninteractive"
 
+
+
+
 ## Install php nginx mysql supervisor ###
 ########################################
-RUN apt-get update && apt-get install -y \
+RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y \
     php-fpm \
     php-cli \
     php-gd  \
@@ -14,6 +17,7 @@ RUN apt-get update && apt-get install -y \
     nginx \
     wget \
     unzip \
+    mysql-server \
     supervisor
    
 
@@ -36,8 +40,12 @@ ADD files/php-fpm.conf /etc/php/7.0/fpm/
 ADD files/modx-config.xml /tmp/
 # You can now use SED and docker ENV variables to update the XML file
 RUN cd /tmp/; wget -q https://raw.github.com/craftsmancoding/modx_utils/master/installmodx.php 
-#RUN  cd /DATA/www; php installmodx.php --config=modx-config.xml
 
+### MYSQL ###
+############
+ENV ROOT_PWD gert
+#ADD mysql.sh /tmp/mysql.sh
+#RUN sh /tmp/mysql.sh && rm /tmp/mysql.sh
 
 # Volumes explained
 # At some point move to using flocker for volumes - http://clusterhq.com/2015/12/09/difference-docker-volumes-flocker-volumes/
@@ -61,4 +69,3 @@ VOLUME /DATA
 ADD start.sh /
 RUN chmod u+x /start.sh
 CMD /start.sh
-#CMD ["/usr/bin/supervisord", "-n", "-c", "/etc/supervisor/supervisord.conf"]
