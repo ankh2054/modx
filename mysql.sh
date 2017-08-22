@@ -28,16 +28,23 @@ create_log_dir() {
   chown -R mysql:mysql /var/log/mysql
 }
 
+mysql_default_install() {
+    /usr/bin/mysql_install_db --datadir=/var/lib/mysql
+}
+
+set_mysql_root_pw() {
+    /usr/bin/mysqld_safe &
+    sleep 5
+    ps axl
+    ls -l /var/lib
+    ps axl
+    /usr/bin/mysqladmin -u root password "${ROOT_PWD}"
+
+
+}
+
 create_data_dir
 create_run_dir
 create_log_dir
-
-
-/usr/bin/mysql_install_db --datadir=/var/lib/mysql
-chown -R mysql:mysql /var/lib/mysql
-/usr/bin/mysqld_safe &
-sleep 5
-ps axl
-ls -l /var/lib
-ps axl
-/usr/bin/mysqladmin -u root password "${ROOT_PWD}"
+mysql_default_install
+set_mysql_root_pw
