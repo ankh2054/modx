@@ -1,6 +1,6 @@
 FROM ubuntu:16.04
 MAINTAINER - Charles Holtzkampf <charles.holtzkampf@gmail.com>
-RUN export DEBIAN_FRONTEND="noninteractive
+RUN export DEBIAN_FRONTEND="noninteractive"
 
 ## Install php nginx mysql supervisor ###
 ########################################
