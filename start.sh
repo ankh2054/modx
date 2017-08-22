@@ -1,23 +1,18 @@
-#!/bin/bash
+#!/bin/sh
 
-set -e
-
-chown -R www-data:www-data /DATA
-
-# init mysql db if necessary
-#if [ ! -d /var/lib/mysql/mysql ];then
-#    mysqld --initialize-insecure --user=root --datadir=/var/lib/mysql
-#fi
-#
-#chown -R mysql:mysql /var/lib/mysql
-
-# start php-fpm
+# Create LOG directoties for NGINX & PHP-FPM
 mkdir -p /DATA/logs/php-fpm
-# start nginx
 mkdir -p /DATA/logs/nginx
-mkdir -p /tmp/nginx
-chown www-data:www-data /tmp/www-data
+mkdir -p /DATA/www
+
+#Copy MODX config files & install if file do not already exist
+if [ ! -e /DATA/www/core/config/config.inc.php ] ; then
+  cp /tmp/* /DATA/www
+fi
+
+#Apply correct permissions
 chown -R www-data:www-data /DATA
 
-/usr/sbin/php-fpm7.0 
-/usr/sbin/nginx 
+
+#Start Supervisor 
+/usr/bin/supervisord -n -c /etc/supervisor/supervisord.conf
