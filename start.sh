@@ -96,9 +96,16 @@ apply_www_permissions(){
 
 # copy MODX config files & install if file do not already exist
 modx_install(){
-  echo "Installing MODX"
+  echo "Installing MODX if not already istalled"
   if [ ! -e /DATA/www/core/config/config.inc.php ] ; then
-  cp /tmp/* /DATA/www
+
+  # get latest MODX cms and extract to /DATA/www
+  echo "Downloading and extractig the latest MODX"
+  current="$(curl -sSL 'https://api.github.com/repos/modxcms/revolution/tags' | sed -n 's/^.*"name": "v\([^"]*\)-pl".*$/\1/p' | head -n1)"
+  curl -o /tmp/modx.zip -sSL https://modx.com/download/direct/modx-$current-pl.zip 
+  unzip /tmp/modx.zip -x "*/./" -d /DATA/www > /dev/null 2>&1
+  mv /DATA/www/modx-$current-pl/* /DATA/www
+  rm -R /DATA/www/modx-$current-pl/
 
   cat > /DATA/www/setup/config.xml <<EOF
 <modx>
@@ -131,7 +138,10 @@ modx_install(){
 </modx>
 EOF
 
-fi
+  else
+    echo "MODX already installed"
+
+  fi
 
 }
 
@@ -151,6 +161,3 @@ modx_install
 # Start Supervisor 
 echo "Starting Supervisor"
 /usr/bin/supervisord -n -c /etc/supervisor/supervisord.conf
-
-
-
