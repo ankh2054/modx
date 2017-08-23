@@ -155,8 +155,8 @@ mysql_default_install
 create_modx_database
 set_mysql_root_pw
 create_www_dir
-apply_www_permissions
 modx_install
+apply_www_permissions
 
 # Start Supervisor 
 echo "Starting Supervisor"
