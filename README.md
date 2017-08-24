@@ -18,14 +18,20 @@ This ensures that even if your container is lost or deleted, you won't loose you
 
 To run it:
 
-    $ docker run  --name www.test.co.uk --expose 80  -d \
-      -e 'VIRTUAL_HOST=www.test.co.uk' \
-      -e 'MODX_DB_HOST=localhost' \
-      -e 'DB_NAME=modx' \
-      -e 'DB_USER=modx' \
-      -e 'DB_PASS=password' \ 
-      -v /data/sites/www.test.co.uk:/DATA \ 
-      -v /data/sites/www.test.co.uk/mysql:/var/lib/mysql modx \
+    $ docker run  --name docker.modx --expose 80 \
+	 -d -e 'VIRTUAL_HOST=www.test.co.uk' \
+	 -e 'MODX_DB_HOST=localhost' \
+	 -e 'MODX_DB_NAME=docker' \
+	 -e 'MODX_DB_USER=modx' \
+	 -e 'MODX_DB_PASSWORD=password' \
+	 -e 'MODX_ADMIN_USER=admin' \
+	 -e 'MODX_ADMIN_PASSWORD=password' \
+	 -e 'MODX_ADMIN_EMAIL=test@test.com' \
+	 -e 'DB_NAME=docker' \
+	 -e 'DB_USER=modx' \
+	 -e 'DB_PASS=nightshade900' \
+	 -v /data/sites/www.test.co.uk/mysql:/var/lib/mysql \
+	 -v /data/sites/www.test.co.uk:/DATA modx
 
 
 This will create a new MODX instance with the following values:
@@ -34,6 +40,8 @@ This will create a new MODX instance with the following values:
 	$ MODX database: modx
 	$ MODX database user: modx
 	$ MODX database password: password
+	$ MODX admin username: admin
+	$ MODX admin password: password
 	
 
 
