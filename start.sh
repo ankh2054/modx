@@ -82,7 +82,7 @@ create_modx_database() {
 
 set_mysql_root_pw() {
     # Check if root password has already been set.
-    r=`mysqladmin -uroot  status`
+    r=`/usr/bin/mysqladmin -uroot  status`
     if [ ! $? -ne 0 ] ; then
       echo "Setting Mysql root password"
       /usr/bin/mysqladmin -u root password "${ROOT_PWD}"
