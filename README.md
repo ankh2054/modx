@@ -17,3 +17,8 @@ To run it:
 
     $ docker run -d -p 80:80 -v /var/run/docker.sock:/tmp/docker.sock:ro etopian/nginx-proxy
 
+
+
+
+[1]: https://github.com/etopian/docker-gen
+[2]: http://jasonwilder.com/blog/2014/03/25/automated-nginx-reverse-proxy-for-docker/
