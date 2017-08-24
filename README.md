@@ -1,4 +1,4 @@
-![nginx 1.9.0](https://img.shields.io/badge/nginx-1.9.0-brightgreen.svg) ![License MIT](https://img.shields.io/badge/license-MIT-blue.svg)
+![License MIT](https://img.shields.io/badge/license-MIT-blue.svg)
 
 # MODX-DOCKER
 
