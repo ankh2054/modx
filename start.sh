@@ -78,16 +78,11 @@ create_modx_database() {
 }
 
 set_mysql_root_pw() {
-  if [ ! -d "/var/lib/mysql/mysql" ]; then
-    # set root password for mysql.
+      # set root password for mysql.
     echo "Setting root password"
     /usr/bin/mysqladmin -u root password "${ROOT_PWD}"
 
-    # shutdown mysql reeady for supervisor to start mysql.
-    /usr/bin/mysqladmin -u root --password=${ROOT_PWD} shutdown
-  else 
-    echo "Default database exists, therefore root password already set"
-  fi
+
 }
 
 
@@ -158,6 +153,15 @@ modx_install(){
   <remove_setup_directory>1</remove_setup_directory>
 </modx>
 EOF
+  echo "Installing MODX"
+  chown www-data:www-data /DATA/www/setup/config.xml
+  php /DATA/www/setup/index.php --installmode=new
+
+
+  # shutdown mysql reeady for supervisor to start mysql.
+  timeout=10
+  echo "Shutting down Mysql ready for supervisor"
+  /usr/bin/mysqladmin -u root --password=${ROOT_PWD} shutdown
 
   else
     echo "MODX already installed"
@@ -176,8 +180,9 @@ mysql_default_install
 create_modx_database
 set_mysql_root_pw
 create_www_dir
-apply_www_permissions
 modx_install
+apply_www_permissions
+
 
 # Start Supervisor 
 echo "Starting Supervisor"
