@@ -69,6 +69,9 @@ create_modx_database() {
           mysql -uroot  -e  "GRANT USAGE ON *.* TO ${DB_USER}@localhost IDENTIFIED BY '${DB_PASS}';"
           mysql -uroot  -e  "GRANT ALL PRIVILEGES ON ${DB_NAME}.* TO ${DB_USER}@localhost;"
 
+      else
+        echo "How have not provided all the required ENV variabvles to configure the database"
+
       fi
   else 
       echo "Database \"${DB_NAME}\" already exists"
@@ -155,7 +158,14 @@ modx_install(){
 EOF
   echo "Installing MODX"
   chown www-data:www-data /DATA/www/setup/config.xml
-  php /DATA/www/setup/index.php --installmode=new
+
+    if [ -n "${MODX_DB_HOST}" -a -n "${MODX_DB_USER}" -a -n "${MODX_DB_NAME}" -a -n "${MODX_DB_PASSWORD}" -a -n "${MODX_ADMIN_USER}" -a -n "${MODX_ADMIN_PASSWORD}" -a -n "${MODX_ADMIN_EMAIL}" ] ; then
+      php /DATA/www/setup/index.php --installmode=new
+
+    else
+      echo "You have not provided all the variables to install MODX"
+
+    fi
 
 
   # shutdown mysql reeady for supervisor to start mysql.
