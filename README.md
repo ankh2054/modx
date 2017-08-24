@@ -18,7 +18,14 @@ This ensures that even if your container is lost or deleted, you won't loose you
 
 To run it:
 
-    $ docker run  --name www.test.co.uk --expose 80  -d -e 'VIRTUAL_HOST=www.test.co.uk'  -e 'MODX_DB_HOST=localhost' -e 'DB_NAME=modx' -e 'DB_USER=modx' -e 'DB_PASS=password' -v /data/sites/www.test.co.uk:/DATA -v /data/sites/www.test.co.uk/mysql:/var/lib/mysql modx
+    $ docker run  --name www.test.co.uk --expose 80  -d 
+    \-e 'VIRTUAL_HOST=www.test.co.uk'  
+    \-e 'MODX_DB_HOST=localhost' 
+    \-e 'DB_NAME=modx' 
+    \-e 'DB_USER=modx' 
+    \-e 'DB_PASS=password' 
+    \-v /data/sites/www.test.co.uk:/DATA 
+    \-v /data/sites/www.test.co.uk/mysql:/var/lib/mysql modx
 
 
 This will create a new MODX instance with the following values:
