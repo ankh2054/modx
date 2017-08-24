@@ -30,10 +30,11 @@ To run it:
 
 This will create a new MODX instance with the following values:
 
-	$ website address - www.test.co.uk
-	$ MODX database - modx
-	$ MODX database user - modx
-	$ MODX database password - password
+	$ Virtual Host: - www.test.co.uk
+	$ MODX database: modx
+	$ MODX database user: modx
+	$ MODX database password: password
+	
 
 
 # NGINX-PROXY
