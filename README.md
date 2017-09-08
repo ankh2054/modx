@@ -16,6 +16,10 @@ This ensures that even if your container is lost or deleted, you won't loose you
 	$ mkdir -p /data/sites/www.test.co.uk/logs
 	$ mkdir -p /data/sites/www.test.co.uk/mysql
 
+
+To buld the docker modx image:
+    $ docker build -t modx. 
+
 To run it:
 
     $ docker run  --name docker.modx --expose 80 \
