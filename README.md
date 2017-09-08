@@ -18,6 +18,7 @@ This ensures that even if your container is lost or deleted, you won't loose you
 
 
 To buld the docker modx image:
+
 Download and extract files to modx/ directory. 
 
 		$ cd modx/
