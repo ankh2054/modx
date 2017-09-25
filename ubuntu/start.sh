@@ -1,4 +1,4 @@
-#!/bin/sh
+u#!/bin/sh
 
 
 # 1.MYSQL SETUP 
