@@ -194,7 +194,7 @@ mysql_default_install
 create_modx_database
 set_mysql_root_pw
 create_www_dir
-modx_install
+#modx_install
 apply_www_permissions
 
 
